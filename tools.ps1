@@ -1,13 +1,44 @@
 ﻿##Create the Form
 Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName PresentationFramework
 [System.Windows.Forms.Application]::EnableVisualStyles()
+[void][System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
+[void][System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
+[void][System.Windows.Forms.Application]::EnableVisualStyles()
+#region ---------------------------------------creacion repositorio y custom------------------------------------
+
+$tools = "C:\ProgramData\ServiceUI"
+$path = $(Join-Path $tools Check)
+$ico = Test-Path "$tools\favicon.ico"
+$back = Test-Path "$tools\wallpaper_NTT25%.png"
+if (!(Test-Path $path))
+{
+	New-Item -Path $path -ItemType Directory -Force -Confirm:$false
+}
+if ($ico -eq $false)
+{
+	Invoke-WebRequest "https://sastdprointune.blob.core.windows.net/intune/faviconntt.ico?sv=2020-04-08&st=2021-06-28T15%3A53%3A44Z&se=2040-06-29T15%3A53%3A00Z&sr=b&sp=r&sig=%2FFwt6lXnJeeTZegqoOzv60BVSe%2B5BvHs6UI7oms7IZA%3D" -outfile "$tools\faviconntt.ico"
+}
+
+if ($back -eq $false)
+{
+	Invoke-WebRequest "https://sastdprointune.blob.core.windows.net/intune/wallpaper_everis25%.png?sv=2019-12-12&st=2021-04-16T11%3A39%3A25Z&se=2041-04-17T11%3A39%3A00Z&sr=b&sp=r&sig=DYi51OiVyPmU2MYNpa%2BjVGd5NOHON8IQQN1NeMsJexI%3D" -outfile "$tools\wallpaper_NTT25%.png"
+}
+
+
+
+
+
 
 $AutopilotMenu = New-Object system.Windows.Forms.Form
 $AutopilotMenu.ClientSize = New-Object System.Drawing.Point(396, 431)
 $AutopilotMenu.text = "Autopilot Tools"
 $AutopilotMenu.TopMost = $false
 $AutopilotMenu.BackColor = [System.Drawing.ColorTranslator]::FromHtml("#ffffff")
-
+$formIcon = New-Object system.drawing.icon ("$tools\faviconntt.ico")
+$AutopilotMenu.Icon = $formicon
+$FormImage = [system.drawing.image]::FromFile("$tools\wallpaper_NTT25%.png")
+$AutopilotMenu.BackgroundImage = $FormImage
 
 $eventvwr = New-Object system.Windows.Forms.Button
 $eventvwr.text = "Event Viewer"
